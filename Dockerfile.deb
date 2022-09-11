@@ -1,11 +1,4 @@
-# build ocaml-tools debian package
-FROM ocaml/opam:debian-11 as opam
-FROM debian:bullseye as build
-RUN apt-get update && apt-get install -y ruby ruby-dev rubygems build-essential curl git bzip2
-RUN mkdir -p /tmp/installdir/usr/bin /tmp/installdir/usr/lib
-RUN cd /root && curl -OL https://github.com/ocaml/ocaml/archive/refs/tags/4.14.0.tar.gz && tar -xf 4.14.0.tar.gz && cd ocaml-4.14.0 && ./configure --prefix=/usr && make -j world.opt >/dev/null && make install DESTDIR=/tmp/installdir && make install && cd / && rm -f /root/4.14.0.tar.gz && rm -rf /root/ocaml-4.14.0
-COPY --from=opam /usr/bin/opam-2.1 /usr/bin/opam
-COPY --from=opam /usr/bin/opam-2.1 /tmp/installdir/usr/bin/opam
+FROM ghcr.io/avsm/ocaml-devcontainer:4.14-ocaml
 RUN opam init -ya --disable-sandboxing -c ocaml.4.14.0
 RUN opam pin add -n odoc --dev
 RUN opam install --confirm-level=unsafe-yes dune ocaml-lsp-server opam-monorepo ocamlformat.0.24.1 dune-release odoc mdx
