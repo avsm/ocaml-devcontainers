@@ -1,9 +1,11 @@
 # build ocaml-tools debian package
+FROM ocaml/opam:debian-11 as opam
 FROM debian:bullseye as build
 RUN apt-get update && apt-get install -y ruby ruby-dev rubygems build-essential curl git bzip2
 RUN mkdir -p /tmp/installdir/usr/bin /tmp/installdir/usr/lib
-RUN cd /root && curl -OL https://github.com/ocaml/ocaml/archive/refs/tags/4.14.0.tar.gz && tar -xf 4.14.0.tar.gz && cd ocaml-4.14.0 && ./configure --prefix=/usr && make -j world.opt && make install DESTDIR=/tmp/installdir && make install && cd / && rm -f /root/4.14.0.tar.gz && rm -rf /root/ocaml-4.14.0
-RUN cd /root && curl -OL https://github.com/ocaml/opam/releases/download/2.1.3/opam-full-2.1.3.tar.gz && tar -zxf opam-full-2.1.3.tar.gz && cd opam-full-2.1.3 && ./configure --prefix=/usr && make lib-ext && make && make install DESTDIR=/tmp/installdir && make install && cd / && rm -f /root/opam-full-2.1.3.tar.gz && rm -rf /root/opam-full-2.1.3
+RUN cd /root && curl -OL https://github.com/ocaml/ocaml/archive/refs/tags/4.14.0.tar.gz && tar -xf 4.14.0.tar.gz && cd ocaml-4.14.0 && ./configure --prefix=/usr && make -j world.opt >/dev/null && make install DESTDIR=/tmp/installdir && make install && cd / && rm -f /root/4.14.0.tar.gz && rm -rf /root/ocaml-4.14.0
+COPY --from=opam /usr/bin/opam-2.1 /usr/bin/opam
+COPY --from=opam /usr/bin/opam-2.1 /tmp/installdir/usr/bin/opam
 RUN opam init -ya --disable-sandboxing -c ocaml.4.14.0
 RUN opam pin add -n odoc --dev
 RUN opam install --confirm-level=unsafe-yes dune ocaml-lsp-server opam-monorepo ocamlformat.0.24.1 dune-release odoc mdx
