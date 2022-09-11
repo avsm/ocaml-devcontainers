@@ -9,6 +9,6 @@ RUN opam pin add -n odoc --dev
 RUN opam install --confirm-level=unsafe-yes dune ocaml-lsp-server opam-monorepo ocamlformat.0.24.1 dune-release odoc mdx
 RUN bash -c "mv /root/.opam/ocaml.4.14.0/bin/{dune,ocamllsp,opam-monorepo,ocamlformat,dune-release,odoc,ocaml-mdx} /tmp/installdir/usr/bin"
 RUN gem install fpm
-RUN fpm -s dir -t deb -p ocaml-tools-4.14.0-`dpkg --print-architecture`.deb --name ocaml-tools --license lgpl2 --version 4.14.0~`date +%Y%m%d` --architecture `dpkg --print-architecture` --maintainer "Anil Madhavapeddy <anil@recoil.org>" -C /tmp/installdir .
+RUN fpm -s dir -t deb -p ocaml-dev-tools-4.14.0_`dpkg --print-architecture`.deb --name ocaml-dev-tools --license lgpl2 --version 4.14.0~`date +%Y%m%d` --architecture `dpkg --print-architecture` --maintainer "Anil Madhavapeddy <anil@recoil.org>" -C /tmp/installdir .
 FROM debian:bullseye
-COPY --from=build /ocaml-tools*.deb /root
+COPY --from=build /ocaml-dev-tools*.deb /root
