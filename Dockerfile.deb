@@ -1,13 +1,14 @@
 # build ocaml-tools debian package
-FROM alpine:3.16
-RUN apk add --update build-base bzip2 git tar curl ca-certificates openssl
+FROM debian:bullseye as build
+RUN apt-get update && apt-get install -y ruby ruby-dev rubygems build-essential curl git bzip2
 RUN mkdir -p /tmp/installdir/usr/bin /tmp/installdir/usr/lib
-RUN cd /root && curl -OL https://github.com/ocaml/ocaml/archive/refs/tags/4.14.0.tar.gz && tar -xf 4.14.0.tar.gz && cd ocaml-4.14.0 && env cclibs=-static ./configure --prefix=/usr && make -j world.opt && make install DESTDIR=/tmp/installdir && make install && cd / && rm -f /root/4.14.0.tar.gz && rm -rf /root/ocaml-4.14.0
+RUN cd /root && curl -OL https://github.com/ocaml/ocaml/archive/refs/tags/4.14.0.tar.gz && tar -xf 4.14.0.tar.gz && cd ocaml-4.14.0 && ./configure --prefix=/usr && make -j world.opt && make install DESTDIR=/tmp/installdir && make install && cd / && rm -f /root/4.14.0.tar.gz && rm -rf /root/ocaml-4.14.0
 RUN cd /root && curl -OL https://github.com/ocaml/opam/releases/download/2.1.3/opam-full-2.1.3.tar.gz && tar -zxf opam-full-2.1.3.tar.gz && cd opam-full-2.1.3 && ./configure --prefix=/usr && make lib-ext && make && make install DESTDIR=/tmp/installdir && make install && cd / && rm -f /root/opam-full-2.1.3.tar.gz && rm -rf /root/opam-full-2.1.3
 RUN opam init -ya --disable-sandboxing -c ocaml.4.14.0
 RUN opam pin add -n odoc --dev
 RUN opam install --confirm-level=unsafe-yes dune ocaml-lsp-server opam-monorepo ocamlformat.0.24.1 dune-release odoc mdx
-RUN apk add bash ruby
 RUN bash -c "mv /root/.opam/ocaml.4.14.0/bin/{dune,ocamllsp,opam-monorepo,ocamlformat,dune-release,odoc,ocaml-mdx} /tmp/installdir/usr/bin"
 RUN gem install fpm
-RUN fpm -s dir -t deb -p ocaml-tools-4.14.0-`uname -m`.deb --name ocaml-tools --license lgpl2 --version 4.14.0 --architecture `uname -m` --maintainer "Anil Madhavapeddy <anil@recoil.org>" -C /tmp/installdir .
+RUN fpm -s dir -t deb -p ocaml-tools-4.14.0-`dpkg --print-architecture`.deb --name ocaml-tools --license lgpl2 --version 4.14.0~`date +%Y%m%d` --architecture `dpkg --print-architecture` --maintainer "Anil Madhavapeddy <anil@recoil.org>" --C /tmp/installdir .
+FROM debian:bullseye
+COPY --from=build /ocaml-tools*.deb /root
