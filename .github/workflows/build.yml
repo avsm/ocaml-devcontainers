@@ -28,21 +28,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       -
-        name: Build and push OCaml packages
-        uses: docker/build-push-action@v3
-        with:
-          file: Dockerfile.ocaml
-          push: true
-          pull: true
-          tags: ghcr.io/avsm/ocaml-devcontainer:4.14-ocaml
-          platforms: linux/arm64,linux/amd64 
-      -
         name: Build and push Debian packages
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.deb
           push: true
           pull: true
+          no-cache: true
           tags: ghcr.io/avsm/ocaml-devcontainer:4.14-debs
           platforms: linux/arm64,linux/amd64 
       -
