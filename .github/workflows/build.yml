@@ -36,8 +36,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.deb
-          build-args:
-            - OCAML_VERSION=4.14.0
+          build-args: OCAML_VERSION=4.14.0
           push: true
           pull: true
           no-cache: true
