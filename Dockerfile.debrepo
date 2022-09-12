@@ -12,8 +12,8 @@ COPY --from=bamd64-5.0.0 /root/*.deb /repo/pool/main
 RUN mkdir -p /repo/dists/stable/main/binary-amd64
 RUN mkdir -p /repo/dists/stable/main/binary-arm64
 WORKDIR /repo
-RUN dpkg-scanpackages -m --arch amd64 pool/ | gzip -c > dists/stable/main/binary-amd64/Packages.gz
-RUN dpkg-scanpackages -m --arch arm64 pool/ | gzip -c > dists/stable/main/binary-arm64/Packages.gz
+RUN dpkg-scanpackages --arch amd64 pool/ | gzip -c > dists/stable/main/binary-amd64/Packages.gz
+RUN dpkg-scanpackages --arch arm64 pool/ | gzip -c > dists/stable/main/binary-arm64/Packages.gz
 COPY generate-release.sh /root/generate-release.sh
 RUN cd /repo/dists/stable && /root/generate-release.sh > Release
 FROM debian:bullseye
