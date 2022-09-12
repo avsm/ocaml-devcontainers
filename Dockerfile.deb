@@ -1,16 +1,16 @@
-# build ocaml-tools debian package
 FROM ocaml/opam:debian-11 as opam
 FROM debian:bullseye as build
+ARG OCAML_VERSION=4.14.0
 RUN apt-get update && apt-get install -y ruby ruby-dev rubygems build-essential curl git bzip2
 RUN mkdir -p /tmp/installdir/usr/bin /tmp/installdir/usr/lib
-RUN cd /root && curl -OL https://github.com/ocaml/ocaml/archive/refs/tags/4.14.0.tar.gz && tar -xf 4.14.0.tar.gz && cd ocaml-4.14.0 && ./configure --prefix=/usr && make -j world.opt >/dev/null && make install DESTDIR=/tmp/installdir && make install && cd / && rm -f /root/4.14.0.tar.gz && rm -rf /root/ocaml-4.14.0
+RUN cd /root && curl -OL https://github.com/ocaml/ocaml/archive/refs/tags/${OCAML_VERSION}.tar.gz && tar -xf ${OCAML_VERSION}.tar.gz && cd ocaml-${OCAML_VERSION} && ./configure --prefix=/usr && make -j world.opt >/dev/null && make install DESTDIR=/tmp/installdir && make install && cd / && rm -f /root/${OCAML_VERSION}.tar.gz && rm -rf /root/ocaml-${OCAML_VERSION}
 COPY --from=opam /usr/bin/opam-2.1 /usr/bin/opam
 COPY --from=opam /usr/bin/opam-2.1 /tmp/installdir/usr/bin/opam
-RUN opam init -ya --disable-sandboxing -c ocaml.4.14.0
+RUN opam init -ya --disable-sandboxing -c ocaml.${OCAML_VERSION}
 RUN opam pin add -n odoc --dev
 RUN opam install --confirm-level=unsafe-yes dune ocaml-lsp-server opam-monorepo ocamlformat.0.24.1 dune-release odoc mdx
-RUN bash -c "mv /root/.opam/ocaml.4.14.0/bin/{dune,ocamllsp,opam-monorepo,ocamlformat,dune-release,odoc,ocaml-mdx} /tmp/installdir/usr/bin"
+RUN bash -c "mv /root/.opam/ocaml.${OCAML_VERSION}/bin/{dune,ocamllsp,opam-monorepo,ocamlformat,dune-release,odoc,ocaml-mdx} /tmp/installdir/usr/bin"
 RUN gem install fpm
-RUN fpm -s dir -t deb -p ocaml-dev-tools-4.14.0_`dpkg --print-architecture`.deb --name ocaml-dev-tools --license lgpl2 --version 4.14.0~`date +%Y%m%d` --architecture `dpkg --print-architecture` --maintainer "Anil Madhavapeddy <anil@recoil.org>" -C /tmp/installdir .
+RUN fpm -s dir -t deb -p ocaml-dev-tools-${OCAML_VERSION}_`dpkg --print-architecture`.deb --name ocaml-dev-tools --license lgpl2 --version ${OCAML_VERSION}~`date +%Y%m%d` --architecture `dpkg --print-architecture` --maintainer "Anil Madhavapeddy <anil@recoil.org>" -C /tmp/installdir .
 FROM debian:bullseye
 COPY --from=build /ocaml-dev-tools*.deb /root

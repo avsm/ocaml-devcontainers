@@ -27,16 +27,26 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+  debs:
+    runs-on: self-hosted
+    needs: [docker]
+    steps:
       -
         name: Build and push Debian packages
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.deb
+          build-args:
+            - OCAML_VERSION=4.14.0
           push: true
           pull: true
           no-cache: true
           tags: ghcr.io/avsm/ocaml-devcontainer:4.14-debs
-          platforms: linux/arm64,linux/amd64 
+          platforms: linux/arm64,linux/amd64
+  repo:
+    runs-on: self-hosted
+    needs: [debs]
+    steps:
       -
         name: Build and push Debian repo
         uses: docker/build-push-action@v3
