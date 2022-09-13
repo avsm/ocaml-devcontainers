@@ -1,7 +1,10 @@
+FROM --platform=amd64 debs AS debs_amd64
+FROM --platform=arm64 debs AS debs_arm64
 FROM debian:bullseye as build
 RUN apt-get update && apt-get -y install gnupg dpkg-dev
 RUN mkdir -p /repo/pool/main
-COPY out/*.deb /repo/pool/main
+COPY --from=debs_amd64 /*.deb /repo/pool/main
+COPY --from=debs_arm64 /*.deb /repo/pool/main
 RUN mkdir -p /repo/dists/stable/main/binary-amd64
 RUN mkdir -p /repo/dists/stable/main/binary-arm64
 WORKDIR /repo
