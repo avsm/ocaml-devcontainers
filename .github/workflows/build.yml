@@ -11,36 +11,6 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  debs:
-    strategy:
-      matrix:
-        ocaml-version: [ "4.14.0", "5.0.0" ]
-    runs-on: self-hosted
-    steps:
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - 
-        name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      -
-        name: Build and push Debian packages
-        uses: docker/build-push-action@v3
-        with:
-          file: Dockerfile.deb
-          build-args: OCAML_VERSION=${{ matrix.ocaml-version }}
-          push: true
-          pull: true
-          no-cache: true
-          tags: ghcr.io/avsm/ocaml-devcontainer:${{ matrix.ocaml-version }}-debs
-          platforms: linux/arm64,linux/amd64
   repo:
     runs-on: self-hosted
     needs: [debs]
@@ -60,11 +30,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build and push Debian repo
-        uses: docker/build-push-action@v3
+        uses: docker/bake-action@master
         with:
-          file: Dockerfile.debrepo
           push: true
-          pull: true
-          no-cache: true
-          tags: ghcr.io/avsm/ocaml-devcontainer:debrepo
-          platforms: linux/arm64,linux/amd64 
