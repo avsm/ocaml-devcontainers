@@ -28,9 +28,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
         name: Build and push Debian repo
         uses: docker/bake-action@master
         with:
-          files: docker-bake.hcl
-          targets: repo
           push: true
