@@ -12,7 +12,7 @@ target "ocaml_debs_5_0_0" {
   args = { OCAML_VERSION="5.0.0" }
 }
 target "repo" {
-  dockerfile = "Dockerfile.allrepo"
+  dockerfile = "Dockerfile.all"
   contexts = {
     debs_4_14_0 = "target:ocaml_debs_4_14_0"
     debs_5_0_0 = "target:ocaml_debs_5_0_0"
