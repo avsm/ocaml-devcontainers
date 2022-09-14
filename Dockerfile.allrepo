@@ -1,3 +1,0 @@
-FROM debian:bullseye
-COPY --from=debs_4_14_0 /repo /srv/4.14.0
-COPY --from=debs_5_0_0 /repo /srv/5.0.0

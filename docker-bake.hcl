@@ -11,23 +11,11 @@ target "ocaml-debs-5_0_0" {
   platforms = [ "linux/arm64", "linux/amd64" ]
   args = { OCAML_VERSION="5.0.0" }
 }
-target "repo_4_14_0" {
-  dockerfile = "Dockerfile.repo"
-  contexts = {
-    debs = "target:ocaml-debs-4_14_0"
-  }
-}
-target "repo_5_0_0" {
-  dockerfile = "Dockerfile.repo"
-  contexts = {
-    debs = "target:ocaml-debs-5_0_0"
-  }
-}
 target "repo" {
   dockerfile = "Dockerfile.allrepo"
   contexts = {
-    debs_4_14_0 = "target:repo_4_14_0"
-    debs_5_0_0 = "target:repo_5_0_0"
+    debs_4_14_0 = "target:ocaml-debs_4_14_0"
+    debs_5_0_0 = "target:ocaml-debs_5_0_0"
   }
-  tags = [ "ghcr.io/avsm/ocaml-devcontainers:repo" ]
+  tags = [ "ghcr.io/avsm/ocaml-devcontainers:debs" ]
 }
