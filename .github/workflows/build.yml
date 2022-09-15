@@ -38,8 +38,8 @@ jobs:
       - uses: shrink/actions-docker-extract@v1
         id: extract
         with:
-          image: ghcr.io/avsm/ocaml-devcontainer:debs
-          path: /srv
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:debs
+          path: /srv/.
       - name: Upload debs to release
         uses: svenstaro/upload-release-action@v2
         with:
