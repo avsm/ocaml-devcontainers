@@ -46,5 +46,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ steps.extract.outputs.destination }}/*.deb
           tag: debs
-        overwrite: true
-        file_glob: true
+          overwrite: true
+          file_glob: true
