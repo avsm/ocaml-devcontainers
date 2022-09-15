@@ -35,3 +35,16 @@ jobs:
         uses: docker/bake-action@master
         with:
           push: true
+      - uses: shrink/actions-docker-extract@v1
+        id: extract
+        with:
+          image: ghcr.io/avsm/ocaml-devcontainer:debs
+          path: /srv
+      - name: Upload debs to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ steps.extract.outputs.destination }}/*.deb
+          tag: debs
+        overwrite: true
+        file_glob: true
