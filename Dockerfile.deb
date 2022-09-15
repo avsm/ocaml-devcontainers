@@ -10,6 +10,6 @@ COPY --from=opam /usr/bin/opam-2.1 /tmp/installdir/usr/bin/opam
 COPY install-tools.sh /root/install-tools.sh
 RUN /root/install-tools.sh ${OCAML_VERSION}
 RUN gem install fpm
-RUN fpm -s dir -t deb -p ocaml-dev-tools-${OCAML_VERSION}_`dpkg --print-architecture`.deb --name ocaml-dev-tools --license lgpl2 --version ${OCAML_VERSION}~`date +%Y%m%d` --architecture `dpkg --print-architecture` --maintainer "Anil Madhavapeddy <anil@recoil.org>" -C /tmp/installdir .
+RUN fpm -s dir -t deb -p ocaml-dev-tools_${OCAML_VERSION}_`dpkg --print-architecture`.deb --name ocaml-dev-tools --license lgpl2 --version ${OCAML_VERSION}~`date +%Y%m%d` --architecture `dpkg --print-architecture` --maintainer "Anil Madhavapeddy <anil@recoil.org>" -C /tmp/installdir .
 FROM scratch
 COPY --from=build /ocaml-dev-tools*.deb /
