@@ -6,7 +6,7 @@ cd /root
 OCAML_VERSION=$1
 case ${OCAML_VERSION} in
 5.0.0)
-  OCAML_VERSION=5.0.0-beta2
+  OCAML_VERSION=5.0.0-rc1
   ;;
 *)
   ;;
