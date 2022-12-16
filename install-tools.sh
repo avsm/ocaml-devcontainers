@@ -11,6 +11,9 @@ case ${OCAML_VERSION} in
 5.0.0)
   opam repo add alpha https://github.com/kit-ty-kate/opam-alpha-repository.git
   ;;
+5.1.0)
+  opam repo add alpha https://github.com/kit-ty-kate/opam-alpha-repository.git
+  ;;
 *)
   ;;
 esac

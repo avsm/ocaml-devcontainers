@@ -10,9 +10,6 @@ case ${OCAML_VERSION} in
   OCAML_VERSION=trunk
   MODE=heads
   ;;
-5.0.0)
-  OCAML_VERSION=5.0.0-rc1
-  ;;
 *)
   ;;
 esac
