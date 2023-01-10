@@ -24,5 +24,5 @@ if [ "$TRUNK" = "0" ]; then
   mv /root/.opam/ocaml.${OCAML_VERSION}/bin/{dune,ocamllsp,opam-monorepo,ocamlformat,dune-release,odoc,ocaml-mdx} /tmp/installdir/usr/bin
 else
   opam install --confirm-level=unsafe-yes dune
-  mv /root/.opam/ocaml.${OCAML_VERSION}/bin/{dune} /tmp/installdir/usr/bin
+  mv /root/.opam/ocaml.${OCAML_VERSION}/bin/dune /tmp/installdir/usr/bin
 fi
