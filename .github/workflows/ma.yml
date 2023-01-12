@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v3
       -
         name: Build and push Debian repo
-        uses: docker/bake-action@master
+        uses: docker/build-push-action@master
         with:
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-${{ env.ARCH }}
