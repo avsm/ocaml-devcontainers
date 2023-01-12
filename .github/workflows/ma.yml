@@ -28,8 +28,17 @@ jobs:
         uses: actions/checkout@v3
       -
         name: Build and push Debian repo
+        id: build
         uses: docker/build-push-action@master
         with:
           file: Dockerfile.deb
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-${{ env.ARCH }}
+      - name: Store digest
+        run: echo ${{ steps.build.outputs.digest }} > hash-arm64
+      - name: Upload digest
+        uses: actions/upload-artifact@v3
+        with:
+          name: hash-arm64
+          path: hash-arm64
+          retention-days: 1
