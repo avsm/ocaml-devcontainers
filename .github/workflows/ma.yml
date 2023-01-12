@@ -42,8 +42,7 @@ jobs:
         uses: docker/build-push-action@master
         with:
           file: Dockerfile.deb
-          build-args:
-            - OCAML_VERSION=${{ strategy.ocaml-version }}
+          build-args: [ "OCAML_VERSION=${{ strategy.ocaml-version }}" ]
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-${{ strategy.ocaml-version }}-${{ env.ARCH }}
           push: true
       - name: Store digest
