@@ -13,12 +13,12 @@ jobs:
       matrix:
         runs-on: ['buildjet-32vcpu-ubuntu-2204-arm', 'buildjet-32vcpu-ubuntu-2204']
         ocaml-version: ['4.14.1']
-    runs-on: ${{ strategy.runs-on }}
+    runs-on: ${{ matrix.runs-on }}
     steps:
       -
         name: Detect architecture
         run: |
-          if [ "${{ endswith(strategy.runs-on, 'arm') }}" = "true" ]; then
+          if [ "${{ endswith(matrix.runs-on, 'arm') }}" = "true" ]; then
             echo "ARCH=arm64" >> $GITHUB_ENV
           else
             echo "ARCH=amd64" >> $GITHUB_ENV
@@ -43,8 +43,8 @@ jobs:
         with:
           file: Dockerfile.deb
           build-args: |
-            OCAML_VERSION=${{ strategy.ocaml-version }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-${{ strategy.ocaml-version }}-${{ env.ARCH }}
+            OCAML_VERSION=${{ matrix.ocaml-version }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-${{ matrix.ocaml-version }}-${{ env.ARCH }}
           push: true
       - name: Store digest
         run: echo ${{ steps.build.outputs.digest }} > hash-${{ env.ARCH }}
