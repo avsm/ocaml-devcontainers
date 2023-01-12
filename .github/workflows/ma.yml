@@ -8,11 +8,11 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  strategy:
-    matrix:
-      runs-on: ['buildjet-32vcpu-ubuntu-2204-arm', 'buildjet-32vcpu-ubuntu-2204']
-      ocaml-version: ['4.14.1']
   build:
+    strategy:
+      matrix:
+        runs-on: ['buildjet-32vcpu-ubuntu-2204-arm', 'buildjet-32vcpu-ubuntu-2204']
+        ocaml-version: ['4.14.1']
     runs-on: ${{ strategy.runs-on }}
     steps:
       -
