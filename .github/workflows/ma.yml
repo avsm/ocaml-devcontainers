@@ -47,10 +47,19 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-${{ matrix.ocaml-version }}-${{ env.ARCH }}
           push: true
       - name: Store digest
-        run: echo ${{ steps.build.outputs.digest }} > hash-${{ env.ARCH }}
+        run: echo ${{ steps.build.outputs.digest }} > hash.txt
       - name: Upload digest
         uses: actions/upload-artifact@v3
         with:
-          name: hash-${{ env.ARCH }}
-          path: hash-${{ env.ARCH }}
+          name: hash-${{ matrix.ocaml-version}}-${{ env.ARCH }}
+          path: hash.txt
           retention-days: 1
+  debs:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Download digests
+      uses: actions/download-artifact@v3
+    - name: Debug digests
+      run: |
+        cat hash-*/hash.txt
