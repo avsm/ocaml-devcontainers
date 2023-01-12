@@ -18,7 +18,7 @@ jobs:
       -
         name: Detect architecture
         run: |
-          if [ "${{ endswith(jobs.build.runs-on, 'arm') }}" = "true" ]; then
+          if [ "${{ endswith(strategy.runs-on, 'arm') }}" = "true" ]; then
             echo "ARCH=arm64" >> $GITHUB_ENV
           else
             echo "ARCH=amd64" >> $GITHUB_ENV
