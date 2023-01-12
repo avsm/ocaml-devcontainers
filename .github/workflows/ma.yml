@@ -9,10 +9,7 @@ env:
 
 jobs:
   repo:
-    strategy:
-      matrix:
-        runs-on: [buildjet-32vcpu-ubuntu-2204,buildjet-32vcpu-ubuntu-2204-arm]
-    runs-on: ${{ matrix.runs-on }}
+    runs-on: buildjet-32vcpu-ubuntu-2204-arm
     steps:
       -
         name: Set up Docker Buildx
