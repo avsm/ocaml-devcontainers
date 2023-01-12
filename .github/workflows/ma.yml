@@ -45,14 +45,12 @@ jobs:
           build-args: |
             OCAML_VERSION=${{ matrix.ocaml-version }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-${{ matrix.ocaml-version }}-${{ env.ARCH }}
-          push: true
-      - name: Store digest
-        run: echo ${{ steps.build.outputs.digest }} > hash.txt
+          outputs: [ "type=local,dest=/tmp/debs" ]
       - name: Upload digest
         uses: actions/upload-artifact@v3
         with:
-          name: hash-${{ matrix.ocaml-version}}-${{ env.ARCH }}
-          path: hash.txt
+          name: debs-${{ matrix.ocaml-version}}-${{ env.ARCH }}
+          path: /tmp/debs
           retention-days: 1
   debs:
     runs-on: ubuntu-latest
@@ -63,12 +61,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Download digests
         uses: actions/download-artifact@v3
-      - name: Debug digests
+      - name: Debug debs
         run: |
-          cat hash-*/hash.txt
-      - name: Extract debs
-        run: |
-          mkdir /tmp/out
-          for i in $(cat hash-*/hash.txt); do
-            docker cp $(docker create ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@$i):/* /tmp/out
-          done
+          ls -R
+          du -h
