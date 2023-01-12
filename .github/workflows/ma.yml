@@ -68,7 +68,7 @@ jobs:
           cat hash-*/hash.txt
       - name: Extract debs
         run: |
-          mkdir /out
+          mkdir /tmp/out
           for i in $(cat hash-*/hash.txt); do
-            docker cp $(docker create ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@$i):/* /out
+            docker cp $(docker create ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@$i):/* /tmp/out
           done
