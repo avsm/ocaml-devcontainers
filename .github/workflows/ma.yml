@@ -45,7 +45,8 @@ jobs:
           build-args: |
             OCAML_VERSION=${{ matrix.ocaml-version }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-${{ matrix.ocaml-version }}-${{ env.ARCH }}
-          outputs: [ "type=local,dest=/tmp/debs" ]
+          outputs: |
+            type=local,dest=/tmp/debs
       - name: Upload digest
         uses: actions/upload-artifact@v3
         with:
