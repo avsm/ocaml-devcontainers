@@ -62,7 +62,17 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Download digests
         uses: actions/download-artifact@v3
-      - name: Debug debs
+      - name: Move debs to one directory
         run: |
-          ls -R
-          du -h
+          mkdir /tmp/debs
+          for i in debs-*; do
+            mv $i/*.deb /tmp/debs/
+          done
+      - name: Upload debs to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: /tmp/debs/*.deb
+          tag: debs
+          overwrite: true
+          file_glob: true
