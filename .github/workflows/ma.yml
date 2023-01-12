@@ -42,10 +42,10 @@ jobs:
         uses: docker/build-push-action@master
         with:
           file: Dockerfile.deb
-          env:
+          build-args:
             - OCAML_VERSION=${{ strategy.ocaml-version }}
-          push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-${{ strategy.ocaml-version }}-${{ env.ARCH }}
+          push: true
       - name: Store digest
         run: echo ${{ steps.build.outputs.digest }} > hash-${{ env.ARCH }}
       - name: Upload digest
