@@ -10,6 +10,8 @@ env:
 jobs:
   repo:
     runs-on: buildjet-32vcpu-ubuntu-2204-arm
+    env:
+      ARCH: arm64
     steps:
       -
         name: Set up Docker Buildx
@@ -28,5 +30,6 @@ jobs:
         name: Build and push Debian repo
         uses: docker/build-push-action@master
         with:
+          file: Dockerfile.deb
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-${{ env.ARCH }}
