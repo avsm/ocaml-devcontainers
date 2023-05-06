@@ -7,7 +7,7 @@ OCAML_VERSION=$1
 MODE=tags
 case ${OCAML_VERSION} in
 5.1.0)
-  OCAML_VERSION=trunk
+  OCAML_VERSION=5.1
   MODE=heads
   ;;
 *)
