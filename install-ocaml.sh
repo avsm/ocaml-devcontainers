@@ -6,6 +6,10 @@ cd /root
 OCAML_VERSION=$1
 MODE=tags
 case ${OCAML_VERSION} in
+5.2.0)
+  OCAML_VERSION=5.2
+  MODE=heads
+  ;;
 5.1.0)
   OCAML_VERSION=5.1
   MODE=heads
