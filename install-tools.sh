@@ -11,6 +11,9 @@ case ${OCAML_VERSION} in
 5.2.0)
   TRUNK=1
   ;;
+5.1.0)
+  TRUNK=1
+  ;;
 *)
   TRUNK=0
   ;;
