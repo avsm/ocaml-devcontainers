@@ -20,7 +20,7 @@ esac
 curl -OL https://github.com/ocaml/ocaml/archive/refs/${MODE}/${OCAML_VERSION}.tar.gz
 tar -xf ${OCAML_VERSION}.tar.gz
 cd ocaml-${OCAML_VERSION}
-./configure --prefix=/usr
+./configure --prefix=/usr/local/ocaml
 make -j world.opt >/dev/null
 make install DESTDIR=/tmp/installdir
 make install

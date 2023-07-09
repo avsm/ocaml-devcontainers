@@ -5,8 +5,8 @@ RUN apt-get update && apt-get install -y ruby ruby-dev rubygems build-essential 
 RUN mkdir -p /tmp/installdir/usr/bin /tmp/installdir/usr/lib
 COPY install-ocaml.sh /root/install-ocaml.sh
 RUN /root/install-ocaml.sh ${OCAML_VERSION}
-COPY --from=opam /usr/bin/opam-2.1 /usr/bin/opam
-COPY --from=opam /usr/bin/opam-2.1 /tmp/installdir/usr/bin/opam
+COPY --from=opam /usr/bin/opam-2.1 /usr/local/ocaml/bin/opam
+COPY --from=opam /usr/bin/opam-2.1 /tmp/installdir/usr/local/ocaml/bin/opam
 COPY install-tools.sh /root/install-tools.sh
 RUN /root/install-tools.sh ${OCAML_VERSION}
 RUN gem install fpm
