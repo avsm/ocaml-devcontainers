@@ -44,7 +44,6 @@ jobs:
           file: Dockerfile.deb
           build-args: |
             OCAML_VERSION=${{ matrix.ocaml-version }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-deb-${{ matrix.ocaml-version }}-${{ env.ARCH }}
           outputs: |
             type=local,dest=/tmp/pkgs/deb
       -
@@ -55,7 +54,6 @@ jobs:
           file: Dockerfile.apk
           build-args: |
             OCAML_VERSION=${{ matrix.ocaml-version }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-apk-${{ matrix.ocaml-version }}-${{ env.ARCH }}
           outputs: |
             type=local,dest=/tmp/pkgs/apk
       - name: Upload packages
