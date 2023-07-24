@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-# TODO: switch to patricoferris/opam-sysinstall when it supports OCaml 5.0
+DESTDIR=${DESTDIR:-/tmp/installdir}
+PREFIX=${PREFIX:-/usr/local/ocaml}
+export PATH=$PATH:$PREFIX/bin
 cd /root
 
 OCAML_VERSION=$1
@@ -21,8 +23,8 @@ esac
 
 if [ "$TRUNK" = "0" ]; then
   opam install --confirm-level=unsafe-yes dune ocaml-lsp-server opam-monorepo ocamlformat dune-release odoc mdx
-  mv /root/.opam/ocaml.${OCAML_VERSION}/bin/{dune,ocamllsp,opam-monorepo,ocamlformat,dune-release,odoc,ocaml-mdx} /tmp/installdir/usr/local/ocaml/bin
+  mv /root/.opam/ocaml.${OCAML_VERSION}/bin/{dune,ocamllsp,opam-monorepo,ocamlformat,dune-release,odoc,ocaml-mdx} ${DESTDIR}/${PREFIX}/bin
 else
   opam install --confirm-level=unsafe-yes dune
-  mv /root/.opam/ocaml.${OCAML_VERSION}/bin/dune /tmp/installdir/usr/local/ocaml/bin
+  mv /root/.opam/ocaml.${OCAML_VERSION}/bin/dune ${DESTDIR}/${PREFIX}/bin
 fi

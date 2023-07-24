@@ -1,0 +1,23 @@
+FROM ocaml/opam:alpine-3.18 as opam
+FROM alpine:3.18 as build
+ARG OCAML_VERSION=4.14.1
+ARG OCAML_PREFIX=/usr/dev/ocaml
+RUN apk add --update alpine-sdk build-base curl git bzip2 bash
+RUN mkdir -p ${OCAML_PREFIX}/bin ${OCAML_PREFIX}/lib
+COPY install-ocaml.sh /root/install-ocaml.sh
+RUN env PREFIX=${OCAML_PREFIX} /root/install-ocaml.sh ${OCAML_VERSION}
+COPY --from=opam /usr/bin/opam-2.1 ${OCAML_PREFIX}/bin/opam
+COPY --from=opam /usr/bin/opam-2.1 /tmp/installdir/${OCAML_PREFIX}/bin/opam
+COPY install-tools.sh /root/install-tools.sh
+RUN env PREFIX=${OCAML_PREFIX} /root/install-tools.sh ${OCAML_VERSION}
+RUN mkdir -p /root/ocaml-dev-tools
+RUN tar -C /tmp/installdir -cvf /root/ocaml-dev-tools/ocaml-dev-tools.tar .
+WORKDIR /root/ocaml-dev-tools
+COPY APKBUILD /root/ocaml-dev-tools
+RUN env SUDO="" abuild-keygen -ani
+RUN abuild -F checksum
+RUN abuild -Fr
+RUN mkdir -p /out/`arch`
+RUN cp /root/packages/root/`arch`/ocaml-dev-tools-*.apk /out/`arch`/
+FROM scratch
+COPY --from=build /out/ /
