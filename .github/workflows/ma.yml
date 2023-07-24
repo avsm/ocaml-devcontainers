@@ -47,7 +47,7 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-deb-${{ matrix.ocaml-version }}-${{ env.ARCH }}
           outputs: |
             type=local,dest=/tmp/pkgs/deb
-     -
+      -
         name: Build and push Alpine repo
         id: build-apk
         uses: docker/build-push-action@master
