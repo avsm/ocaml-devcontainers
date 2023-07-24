@@ -47,7 +47,7 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-deb-${{ matrix.ocaml-version }}-${{ env.ARCH }}
           outputs: |
             type=local,dest=/tmp/pkgs/deb
-      -
+     -
         name: Build and push Alpine repo
         id: build-apk
         uses: docker/build-push-action@master
@@ -62,13 +62,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: debs-${{ matrix.ocaml-version}}-${{ env.ARCH }}
-          path: /tmp/pkgs/debs
+          path: /tmp/pkgs/deb
           retention-days: 1
       - name: Upload apks
         uses: actions/upload-artifact@v3
         with:
           name: apks-${{ matrix.ocaml-version}}-${{ env.ARCH }}
-          path: /tmp/pkgs/apks
+          path: /tmp/pkgs/apk
           retention-days: 1
   debs:
     runs-on: ubuntu-latest
@@ -91,5 +91,19 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: /tmp/debs/*.deb
           tag: debs
+          overwrite: true
+          file_glob: true
+      - name: Move APKs to one directory
+        run: |
+          mkdir /tmp/apks
+          for i in apks-*; do
+            mv $i/*.apk /tmp/apks/
+          done
+      - name: Upload APKs to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: /tmp/apks/*.deb
+          tag: apks
           overwrite: true
           file_glob: true

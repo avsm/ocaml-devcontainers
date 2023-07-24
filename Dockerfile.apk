@@ -19,7 +19,7 @@ RUN /root/apk-vars.sh /root/APKBUILD.in /root/ocaml-dev-tools/APKBUILD
 RUN env SUDO="" abuild-keygen -ani
 RUN abuild -F checksum
 RUN abuild -Fr
-RUN mkdir -p /out/`arch`
-RUN cp /root/packages/root/`arch`/ocaml-dev-tools-*.apk /out/`arch`/
+RUN mkdir -p /out
+RUN cp /root/packages/root/`arch`/ocaml-dev-tools-*.apk /out/ocaml-dev-tools-${OCAML_VERSION}-`arch`.apk
 FROM scratch
 COPY --from=build /out/ /
