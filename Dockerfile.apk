@@ -13,7 +13,9 @@ RUN env PREFIX=${OCAML_PREFIX} /root/install-tools.sh ${OCAML_VERSION}
 RUN mkdir -p /root/ocaml-dev-tools
 RUN tar -C /tmp/installdir -cvf /root/ocaml-dev-tools/ocaml-dev-tools.tar .
 WORKDIR /root/ocaml-dev-tools
-COPY APKBUILD /root/ocaml-dev-tools
+COPY APKBUILD.in /root/
+COPY apk-vars.sh /root/
+RUN /root/apk-vars.sh /root/APKBUILD.in /root/ocaml-dev-tools/APKBUILD
 RUN env SUDO="" abuild-keygen -ani
 RUN abuild -F checksum
 RUN abuild -Fr

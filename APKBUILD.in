@@ -1,10 +1,10 @@
 # Maintainer: Anil Madhavapeddy <anil@recoil.org>
 pkgname=ocaml-dev-tools
-pkgver=4.14.1
-pkgrel=20230724
-pkgdesc="TODO"
-url="https://example.com"
-arch="aarch64"
+pkgver=%OCAML_VERSION%
+pkgrel=%OCAML_DATE%
+pkgdesc="OCaml %OCAML_VERSION% compiler and associated development tools"
+url="https://github.com/avsm/ocaml-devcontainers"
+arch=%OCAML_ARCH%
 license="LGPL2"
 depends=""
 makedepends=""
